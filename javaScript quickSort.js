@@ -1,3 +1,4 @@
+//javaScript再学习
 var arr=[2,25,4,24,5,5,32,24,5,13,96];
 function quickSort(arr,left,right)
 {
