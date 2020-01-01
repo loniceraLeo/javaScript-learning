@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset=utf-8>
   <title>calculator ver1.0</title>
 </head>
 <body>
@@ -50,7 +51,7 @@
     }
     for(let i=0;i<=9;++i)
     {
-      let tempNum='n'+i;4
+      let tempNum='n'+i;
       let tempNumObj=doc.getElementById(tempNum);
       tempNumObj.addEventListener('click',function(){changeOutputLine();return;});
       function changeOutputLine(){
@@ -59,39 +60,81 @@
       }
     }
     let Calculator='';let times=0;
+    let stack=[],state=false;//stack是操作栈
     let CE=doc.getElementById('ce');
-    CE.addEventListener('click',function(){outputNumber=0;outputLine.innerHTML=outputNumber;return;});
+    CE.addEventListener('click',function(){outputNumber=0;stack=[];outputLine.innerHTML=outputNumber;return;});//empty the stack
     function eq(){        //封装进一个匿名函数并立即执行它
-      if (Calculator=='+'){outputNumber+=tempNumber;tempNumber=0;}
-      if (Calculator=='-'){outputNumber=tempNumber-outputNumber;tempNumber=0;}
-      if (Calculator=='x'){outputNumber=tempNumber*outputNumber;tempNumber=0;}
-      if (Calculator=='/'){outputNumber=tempNumber/outputNumber;tempNumber=0;}
+      stack.push(outputNumber); //get the handler of current number
+      if (stack[1]=='+')stack[0]+=stack[2];
+      if (stack[1]=='-')stack[0]-=stack[2];
+      if (stack[1]=='x')stack[0]*=stack[2];
+      if (stack[1]=='/')stack[0]/=stack[2];
+      outputNumber=stack[0];
       if (outputNumber.toString().length>=10) outputNumber=Math.round(outputNumber);
       outputLine.textContent=outputNumber;
+      stack=[];
     };
+    function jisuan(a,b){
+      if (stack[1]=='+') return a+b;
+      if (stack[1]=='-') return a-b;
+      if (stack[1]=='x') return a*b;
+      if (stack[1]=='/') return a/b;
+    }
     let eq1=doc.getElementById('eq');
     eq1.addEventListener('click',function(){eq();return;});
     let jia=doc.getElementById('jia');
     jia.addEventListener('click',
       function(){
-        tempNumber=outputNumber;outputNumber=0;Calculator='+';
+        if (stack.length==0) {stack.push(outputNumber);stack.push('+');}
+        else{
+            stack.push(outputNumber);let temp=jisuan(stack[0],stack[2]);stack=[];
+            stack.push(temp);stack.push('+');
+            outputNumber=stack[0];outputLine.innerHTML=outputNumber;
+        }
+        outputNumber=0;
       });
     let jian=doc.getElementById('jian');
     jian.addEventListener('click',
       function(){
-        tempNumber=outputNumber;outputNumber=0;Calculator='-';
+        if (stack.length==0) {stack.push(outputNumber);stack.push('-');}
+        else{
+            stack.push(outputNumber);let temp=jisuan(stack[0],stack[2]);stack=[];
+            stack.push(temp);stack.push('-');
+            outputNumber=stack[0];outputLine.innerHTML=outputNumber;
+        }
+        outputNumber=0;
       });
     let cheng=doc.getElementById('cheng');
     cheng.addEventListener('click',
       function(){
-        tempNumber=outputNumber;outputNumber=0;Calculator='x';
+        if (stack.length==0) {stack.push(outputNumber);stack.push('x');}
+        else{
+            stack.push(outputNumber);let temp=jisuan(stack[0],stack[2]);stack=[];
+            stack.push(temp);stack.push('x');
+            outputNumber=stack[0];outputLine.innerHTML=outputNumber;
+        }
+        outputNumber=0;
       });
     let chu=doc.getElementById('chu');
       chu.addEventListener('click',
       function(){
-        tempNumber=outputNumber;outputNumber=0;Calculator='/';
+        if (stack.length==0) {stack.push(outputNumber);stack.push('/');}
+        else{
+            stack.push(outputNumber);let temp=jisuan(stack[0],stack[2]);stack=[];
+            stack.push(temp);stack.push('/');
+            outputNumber=stack[0];outputLine.innerHTML=outputNumber;
+        }
+        outputNumber=0;
       });
     //小数点四舍五入嗷
   </script>
-</body>
+  <rooter>
+    copyright©Lonicera Leo
+  </rooter>
+  <style type="text/css">
+    body{
+      overflow: auto;
+    }
+  </style>
+</body>     <!--copyright©LoniceraLeo-->
 </html>
