@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>calculator ver1.0</title>
+</head>
+<body>
+<div style='font-size: 36px;width: 300px'>计算器 ver1.0
+    <div style="position: relative;width: 100%;background: #fac" id='output'>0</div>
+  </div>
+  <style type="text/css">
+    #cal{
+      border:4px solid #aaf;
+      width: 300px;
+      padding: 10px;
+      margin: 0px;
+      text-align: center;
+    }
+    #cal td{
+      height: 36px;
+      font:24px bold;
+      font-family: 思源宋体;
+      border:3px solid #fac;
+    }
+    #cal td:hover{
+      cursor: pointer;
+    }
+  </style>
+  <table id='cal'>
+    <tr><td id='n1'>1</td><td id='n2'>2</td><td id='n3'>3</td><td id='ce'>CE</td></tr>
+    <tr><td id='n4'>4</td><td id='n5'>5</td><td id='n6'>6</td><td id='chu'>/</td></tr>
+    <tr><td id='n7'>7</td><td id='n8'>8</td><td id='n9'>9</td><td id='n0'>0</td></tr>
+    <tr><td id='jia'>+</td><td id='jian'>-</td><td id='cheng'>×</td><td id='eq'>=</td></tr>
+  </table>
+  <script type="text/javascript">
+    "use strict"
+    let doc=document;
+    let outputLine=doc.getElementById('output');
+    let outputNumber=0,tempNumber=0;
+    let buttonSet=doc.getElementById('cal').getElementsByTagName('td');
+    //degguer;console.log(buttonSet.length);
+    function changeBackgroundColor1(obj){
+        obj.style.background='#66ccff';
+    }
+    for(let i=0;i<buttonSet.length;++i)
+    {
+      let tempObj=buttonSet[i];
+      tempObj.addEventListener('mousedown',function(){changeBackgroundColor1(this);return;});
+      tempObj.addEventListener('mouseup',function(){tempObj.style.background='#fff';return;});
+    }
+    for(let i=0;i<=9;++i)
+    {
+      let tempNum='n'+i;4
+      let tempNumObj=doc.getElementById(tempNum);
+      tempNumObj.addEventListener('click',function(){changeOutputLine();return;});
+      function changeOutputLine(){
+        outputNumber*=10;outputNumber+=i;
+        outputLine.innerHTML=outputNumber;
+      }
+    }
+    let Calculator='';let times=0;
+    let CE=doc.getElementById('ce');
+    CE.addEventListener('click',function(){outputNumber=0;outputLine.innerHTML=outputNumber;return;});
+    function eq(){        //封装进一个匿名函数并立即执行它
+      if (Calculator=='+'){outputNumber+=tempNumber;tempNumber=0;}
+      if (Calculator=='-'){outputNumber=tempNumber-outputNumber;tempNumber=0;}
+      if (Calculator=='x'){outputNumber=tempNumber*outputNumber;tempNumber=0;}
+      if (Calculator=='/'){outputNumber=tempNumber/outputNumber;tempNumber=0;}
+      if (outputNumber.toString().length>=10) outputNumber=Math.round(outputNumber);
+      outputLine.textContent=outputNumber;
+    };
+    let eq1=doc.getElementById('eq');
+    eq1.addEventListener('click',function(){eq();return;});
+    let jia=doc.getElementById('jia');
+    jia.addEventListener('click',
+      function(){
+        tempNumber=outputNumber;outputNumber=0;Calculator='+';
+      });
+    let jian=doc.getElementById('jian');
+    jian.addEventListener('click',
+      function(){
+        tempNumber=outputNumber;outputNumber=0;Calculator='-';
+      });
+    let cheng=doc.getElementById('cheng');
+    cheng.addEventListener('click',
+      function(){
+        tempNumber=outputNumber;outputNumber=0;Calculator='x';
+      });
+    let chu=doc.getElementById('chu');
+      chu.addEventListener('click',
+      function(){
+        tempNumber=outputNumber;outputNumber=0;Calculator='/';
+      });
+    //小数点四舍五入嗷
+  </script>
+</body>
+</html>
