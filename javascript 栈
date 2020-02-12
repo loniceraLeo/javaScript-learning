@@ -1,0 +1,42 @@
+/*利用ECMAscript6重写了一个栈，可以通过三种方式初始化一个栈:
+    1.传入若干数字；
+    2.传入一个数组，
+    3.传入另一个stack。此时会返回一个原始stack的深拷贝。*/
+    
+function getClass(o){
+	if (o==null || o==undefined) throw new Error('invalid value');
+	return o.constructor.toString().slice(9,-20);
+}   
+class Stack{
+	constructor(arg){
+		let cls=getClass(arg);
+		switch (cls){
+			case 'Array' : this.arr=arg;break;
+			case 'Number' : 
+				this.arr=new Array();
+				let length=arguments.length;
+				for(let i=0;i<length;++i)
+					this.arr.push(arguments[i]);break;
+			case 'Stack' :
+				this.arr=arg.arr;
+				this.length=arg.length;break;
+			default: throw new Error('invalid arguments!');
+		}
+		this.length=this.arr.length;
+	}
+	push(num){  
+		this.arr[this.length++]=num;
+	}
+	pop(){
+		this.arr.length--;
+		this.length--;
+	}
+	clear(){
+		this.arr.length=0;
+		this.length=0;
+	}
+	top(){
+		return this.arr[this.length-1];
+		clog(this.length)
+	}
+}
