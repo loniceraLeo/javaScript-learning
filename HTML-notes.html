@@ -1,0 +1,76 @@
+<!--采用markdown语法-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>vue学习</title>
+	<meta charset="utf-8">
+	<meta name="author" content="loniceraleo,2192811348@qq.com">
+	<meta name='keywords' content="blog">
+	<meta name="robots" content="index">
+    <script src="https://unpkg.com/marked@0.3.6"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+</head>
+<body>
+	<div id='app' title='wtf?'>
+		<blogger @submit='PassageChange'></blogger>
+		<h1>{{header}}</h1>
+		<p v-html='content'></p>
+		<p v-if='show' style="font-size: 12px">author: {{author}}</p>
+		<p v-if='show' style="font-size: 8px">{{(new Date).toString().slice(0,-8)}}</p>
+	</div>
+	<style type="text/css">
+	</style>
+	<script type="text/javascript">
+		function nextLine(text){
+			let line=/\\/;
+			return text.replace(line,'<br>');
+		}
+		Vue.component('blogger',{
+			data:function(){
+				return {
+					nowTime:(new Date).toString(),
+					author:'loniceraleo',
+					count:0
+				}
+			},
+			props:['content','title'],
+			computed:{
+				rContent:function(){
+					alert('call!')
+					return {title:$('input').val(),content:$('textarea').val()}
+				}
+			},
+			methods:{
+				afterClick:function(){
+					this.$emit('submit',{title:$('input').val(),content:$('textarea').val()});
+					$('input').val('');$('textarea').val('');
+				}
+			},
+			template:`
+			<div style="position:fixed;top:500px">
+				<input type="text" placeholder="header.." style="height:30px;font-size:20px"><button style="width:100px;height:30px;border:2px solid #666;background:#fff;
+				border-radius:5px;font-weight:bolder" id='but1' @click="afterClick">post</button> <br>
+				<textarea style="width:400px;height:200px;font-size:15px" placeholder="write something.."></textarea>
+			</div>`
+		});let vm=new Vue({
+			el:'#app',
+			data:{
+				header:'',
+				content:'',
+				author:'loniceraleo',
+				show:false,
+			},
+			methods:{
+				PassageChange(...args){
+					this.show=true;
+					this.header=arguments[0].title;
+					this.content=nextLine(marked(arguments[0].content));
+				}
+			}
+		});$('input').css('margin-bottom','5px');
+		$('#but1').bind('mouseover',function(){$(this).css('background','rgba(240,160,240,0.5)')}).bind('mouseleave',function(){$(this).css('background','#fff')});
+	</script>
+	<br><br>
+</body>
+</html>
